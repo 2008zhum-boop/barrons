@@ -1,272 +1,1121 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 巴伦财富罗盘模拟挑战</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Playfair+Display:wght@700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Playfair+Display:wght@700&family=Roboto+Mono:wght@500&display=swap"
+        rel="stylesheet">
     <style>
         /* ==================== 1. 全局设置 ==================== */
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: "Noto Serif SC", "PingFang SC", serif;
             background-color: #4a0404;
             background-image: radial-gradient(#6d0b0b 15%, transparent 16%);
             background-size: 20px 20px;
-            display: flex; justify-content: center; align-items: flex-start;
-            min-height: 100vh; color: #333; overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: #333;
+            overflow: hidden;
         }
 
         #app-container {
-            width: 100%; max-width: 414px; height: 100vh;
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
             position: relative;
             background: linear-gradient(180deg, #8B0000 0%, #3e0202 100%);
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-
-        .decoration-top {
-            position: absolute; top: 50px; left: 0; width: 100%; height: 80px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%23FFD700" fill-opacity="0.1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>');
-            background-size: cover; z-index: 1; pointer-events: none;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         /* 顶部导航 */
         .barrons-header {
-            width: 100%; height: 50px; flex-shrink: 0;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 15px; z-index: 100;
-            background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0;
+            width: 100%;
+            height: 50px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            z-index: 100;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
         }
-        .header-left, .header-right { display: flex; align-items: center; gap: 12px; }
-        .user-icon-placeholder { width: 32px; height: 32px; background-color: #ccc; border-radius: 50%; position: relative; overflow: hidden; cursor: pointer; }
-        .user-icon-placeholder::before { content: ''; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; }
-        .user-icon-placeholder::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 10px; background: #fff; border-radius: 10px 10px 0 0; }
-        .header-logo { height: 28px; width: auto; display: block; }
-        .icon-en { font-size: 12px; font-weight: bold; color: #fff; background: #1a1a1a; padding: 2px 5px; border-radius: 4px; }
-        .icon-search { width: 20px; height: 20px; border: 2px solid #1a1a1a; border-radius: 50%; }
+
+        .header-left,
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-icon-placeholder {
+            width: 32px;
+            height: 32px;
+            background-color: #ccc;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .user-icon-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .user-icon-placeholder::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 10px;
+            background: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header-logo {
+            height: 28px;
+            width: auto;
+            display: block;
+        }
+
+        .icon-en {
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            background: #1a1a1a;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .icon-search {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+        }
 
         /* ==================== 2. 页面容器 ==================== */
         .scrollable-page {
-            flex: 1; overflow-y: auto; 
-            padding: 0 20px 160px 20px; 
-            display: flex; flex-direction: column; align-items: center;
-            width: 100%; position: relative;
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 160px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: relative;
             -webkit-overflow-scrolling: touch;
         }
-        .scrollable-page::-webkit-scrollbar { display: none; }
 
-        /* Logo */
+        .scrollable-page::-webkit-scrollbar {
+            display: none;
+        }
+
         .logo-center-large {
-            width: 140px; height: auto; display: block; margin: 30px auto 10px auto; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); flex-shrink: 0;
+            width: 140px;
+            height: auto;
+            display: block;
+            margin: 30px auto 10px auto;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            flex-shrink: 0;
         }
 
         /* ==================== 3. 首页组件 ==================== */
-        .title-group { text-align: center; color: #fff; margin-bottom: 20px; flex-shrink: 0; }
-        .main-title { font-size: 24px; font-weight: 900; letter-spacing: 1px; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .sub-title { font-size: 12px; color: #FFD700; opacity: 0.9; border-top: 1px solid rgba(255,215,0,0.3); border-bottom: 1px solid rgba(255,215,0,0.3); padding: 5px 12px; display: inline-block; line-height: 1.4;}
+        .title-group {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .main-title {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .sub-title {
+            font-size: 12px;
+            color: #FFD700;
+            opacity: 0.9;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 5px 12px;
+            display: inline-block;
+            line-height: 1.4;
+        }
 
         .chart-container {
-            width: 160px; height: 160px; border-radius: 50%; background: #fff; margin: 0 auto 20px auto; 
-            position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.5); border: 4px solid rgba(255,255,255,0.15);
-            transition: background 0.2s ease; display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 0 auto 20px auto;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border: 4px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
         }
-        .chart-center-content { position: absolute; width: 110px; height: 110px; background: #8B0000; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 28px; font-family: "Playfair Display"; font-weight: bold; }
 
-        .controls-panel { width: 100%; background: rgba(0,0,0,0.25); border-radius: 12px; padding: 15px 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; flex-shrink: 0; }
-        .total-status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .total-label { color: #fff; font-size: 14px; font-weight: bold; }
-        .total-value { font-family: "Roboto Mono", monospace; font-size: 16px; font-weight: bold; }
-        .status-ok { color: #4cd964; } .status-warn { color: #FFD700; }
-        .slider-group { margin-bottom: 12px; }
-        .slider-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px; }
-        .label-main { color: #fff; font-size: 14px; font-weight: bold; }
-        .slider-val { font-family: "Roboto Mono", monospace; font-weight: bold; font-size: 14px; }
-        .asset-expl { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; margin-bottom: 4px; text-align: left; }
-        input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px; outline: none; background: rgba(255,255,255,0.2); }
-        .c-growth { color: #ff6b6b; } .c-balance { color: #FFD700; } .c-hedge { color: #64b5f6; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.5); margin-top: -9px; border: 2px solid rgba(255,255,255,0.8); }
+        .chart-center-content {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            background: #8B0000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 28px;
+            font-family: "Playfair Display";
+            font-weight: bold;
+        }
+
+        .controls-panel {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .total-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .total-label {
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .total-value {
+            font-family: "Roboto Mono", monospace;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .status-ok {
+            color: #4cd964;
+        }
+
+        .status-warn {
+            color: #FFD700;
+        }
+
+        .slider-group {
+            margin-bottom: 12px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4px;
+        }
+
+        .label-main {
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .slider-val {
+            font-family: "Roboto Mono", monospace;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .asset-expl {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+            margin-bottom: 4px;
+            text-align: left;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .c-growth {
+            color: #ff6b6b;
+        }
+
+        .c-balance {
+            color: #FFD700;
+        }
+
+        .c-hedge {
+            color: #64b5f6;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            margin-top: -9px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
 
         .section-container {
-            width: 100%; background: rgba(0,0,0,0.2); 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-            padding: 15px; margin-bottom: 20px; flex-shrink: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
         }
-        .section-header { font-size: 15px; font-weight: bold; color: #FFD700; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid #FFD700; }
-        
+
+        .section-header {
+            font-size: 15px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 12px;
+            padding-left: 8px;
+            border-left: 3px solid #FFD700;
+        }
+
         .task-row {
-            background: rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .task-icon { font-size: 20px; margin-right: 10px; }
-        .task-info { flex: 1; }
-        .task-title { font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 2px; }
-        .task-sub { font-size: 10px; color: rgba(255,255,255,0.5); }
-        .task-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; border: none; cursor: pointer; background: linear-gradient(90deg, #FFD700, #FFA500); color: #8B0000; min-width: 70px; }
-        .task-btn.done { background: #666; color: #999; cursor: default; }
+
+        .task-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .task-sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .task-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            color: #8B0000;
+            min-width: 70px;
+        }
+
+        .task-btn.done {
+            background: #666;
+            color: #999;
+            cursor: default;
+        }
 
         .coupon-row-new {
-            background: #fffbe0; border: 1px solid #FFD700; border-radius: 8px;
-            padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-            position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background: #fffbe0;
+            border: 1px solid #FFD700;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .c-new-left { flex: 1; }
-        .c-new-title { font-size: 16px; font-weight: 900; color: #d93025; margin-bottom: 4px; font-family: "Roboto Mono"; }
-        .c-new-desc { font-size: 12px; color: #333; font-weight: bold; margin-bottom: 2px; }
-        .c-new-date { font-size: 10px; color: #888; }
-        .c-new-btn { padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
-        .c-status-use { background: #d93025; color: #fff; box-shadow: 0 2px 5px rgba(217, 48, 37, 0.4); }
-        .c-status-used { background: #999; color: #fff; cursor: default; }
-        .c-status-expired { background: transparent; border: 1px solid #999; color: #999; cursor: default; }
-        .more-coupons { text-align: center; font-size: 12px; color: #FFD700; text-decoration: underline; cursor: pointer; padding: 10px; }
 
-        .page-footer { width: 100%; text-align: center; margin-top: 10px; padding: 10px 0 20px 0; border-top: 1px dashed rgba(255,255,255,0.1); flex-shrink: 0; }
-        .footer-link { color: rgba(255,215,0,0.6); font-size: 12px; text-decoration: underline; cursor: pointer; margin-bottom: 8px; display: inline-block;}
-        .risk-text { color: rgba(255,255,255,0.3); font-size: 10px; line-height: 1.4; padding: 0 10px; text-align: justify; }
+        .c-new-left {
+            flex: 1;
+        }
+
+        .c-new-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #d93025;
+            margin-bottom: 4px;
+            font-family: "Roboto Mono";
+        }
+
+        .c-new-desc {
+            font-size: 12px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .c-new-date {
+            font-size: 10px;
+            color: #888;
+        }
+
+        .c-new-btn {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .c-status-use {
+            background: #d93025;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(217, 48, 37, 0.4);
+        }
+
+        .c-status-used {
+            background: #999;
+            color: #fff;
+            cursor: default;
+        }
+
+        .c-status-expired {
+            background: transparent;
+            border: 1px solid #999;
+            color: #999;
+            cursor: default;
+        }
+
+        .more-coupons {
+            text-align: center;
+            font-size: 12px;
+            color: #FFD700;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .page-footer {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px 0 20px 0;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .footer-link {
+            color: rgba(255, 215, 0, 0.6);
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .risk-text {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 10px;
+            line-height: 1.4;
+            padding: 0 10px;
+            text-align: justify;
+        }
 
         /* 吸底操作区 */
-        .action-area-sticky { 
-            position: absolute; bottom: 0; left: 0; width: 100%; 
+        .action-area-sticky {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             background: linear-gradient(to top, #3e0202 95%, rgba(62, 2, 2, 0));
-            padding: 20px 0 30px 0; z-index: 50; 
-            display: flex; flex-direction: column; align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0 30px 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* 结果页吸底条 (Result Sticky) */
+        #resultAction {
+            transform: translateY(100%);
+            z-index: 200;
+        }
+
+        #resultAction.visible {
+            transform: translateY(0);
+        }
+
         .btn-main {
-            width: 85%; height: 50px;
+            width: 85%;
+            height: 50px;
             background: linear-gradient(135deg, #2ecbe9 0%, #1DB2D4 50%, #158ca7 100%);
-            border: 2px solid rgba(255,255,255,0.3); border-radius: 50px;
-            color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(29, 178, 212, 0.3); margin-bottom: 8px; transition: all 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(29, 178, 212, 0.3);
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
         }
-        .btn-main:active { transform: translateY(2px); }
-        .btn-main:disabled { background: #555; border-color: #777; color: #aaa; box-shadow: none; cursor: not-allowed; }
-        .hint-text { color: rgba(255,255,255,0.6); font-size: 12px; letter-spacing: 1px; }
+
+        .btn-coupon-sticky {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #8B0000;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-main:active {
+            transform: translateY(2px);
+        }
+
+        .btn-main:disabled {
+            background: #555;
+            border-color: #777;
+            color: #aaa;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .hint-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
 
         /* 结果页组件 */
         .report-card {
-            width: 100%; background-color: #fffbe0; border-radius: 12px; padding: 30px 20px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 20px; text-align: center;
+            width: 100%;
+            background-color: #fffbe0;
+            border-radius: 12px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            margin-bottom: 20px;
+            text-align: center;
             background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d9d0b6' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
         }
-        .report-header-hint { 
-            color: #d93025; font-size: 12px; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; 
-            text-transform: uppercase; border-bottom: 1px solid rgba(217, 48, 37, 0.2); display: inline-block; padding-bottom: 3px;
+
+        .report-header-hint {
+            color: #d93025;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(217, 48, 37, 0.2);
+            display: inline-block;
+            padding-bottom: 3px;
         }
-        .report-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px; font-family: "Noto Serif SC"; }
-        .bar-chart { display: flex; height: 12px; width: 100%; border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
-        .bar-seg { height: 100%; transition: width 1s ease; }
-        .report-desc { font-size: 14px; line-height: 1.6; color: #444; text-align: justify; margin-bottom: 20px; }
-        .barrons-advice { text-align: left; border-left: 3px solid #d93025; padding-left: 10px; font-style: italic; font-size: 13px; color: #333; }
-        
+
+        .report-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-family: "Noto Serif SC";
+        }
+
+        .bar-chart {
+            display: flex;
+            height: 12px;
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .bar-seg {
+            height: 100%;
+            transition: width 1s ease;
+        }
+
+        .report-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .master-quote-box {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #333;
+        }
+
+        .master-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .master-text {
+            font-style: italic;
+            color: #666;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .barrons-advice {
+            text-align: left;
+            border-left: 3px solid #d93025;
+            padding-left: 10px;
+            font-style: italic;
+            font-size: 13px;
+            color: #333;
+        }
+
         .risk-warning-box {
-            width: 100%; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;
-            color: rgba(255,255,255,0.6); font-size: 11px; line-height: 1.5; margin-bottom: 20px;
-            text-align: justify; border: 1px dashed rgba(255,255,255,0.1);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: justify;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
         }
 
-        .coupon-premium-wrapper { width: 100%; margin-bottom: 20px; }
-        
-        .coupon-ticket { display: flex; width: 100%; height: 90px; background: linear-gradient(to right, #FFD700 30%, #fff 30%); border-radius: 8px; overflow: hidden; cursor: pointer; }
-        .ticket-left { width: 30%; background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #8B0000; border-right: 2px dashed rgba(139,0,0,0.2); }
-        .ticket-amount { font-size: 28px; font-weight: 900; font-family: "Roboto Mono"; }
-        .ticket-right { flex: 1; padding: 10px 15px; display: flex; flex-direction: column; justify-content: center; background: #fff; }
-        .ticket-title { font-size: 14px; font-weight: bold; margin-bottom: 4px; color:#333; }
-        .ticket-action-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .ticket-btn { background: #d93025; color: #fff; border: none; padding: 4px 12px; border-radius: 20px; font-size: 11px; }
-        
-        /* 吸底优惠券 */
-        .sticky-coupon-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: #FFD700; z-index: 100;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-            transform: translateY(100%); transition: transform 0.3s ease-in-out;
+        .coupon-premium-wrapper {
+            width: 100%;
+            margin-bottom: 20px;
         }
-        .sticky-coupon-bar.visible { transform: translateY(0); }
-        .sticky-text { font-size: 16px; font-weight: 900; color: #330000; font-family: "Roboto Mono"; }
-        .sticky-btn { background: #330000; color: #FFD700; border: none; padding: 10px 25px; border-radius: 30px; font-size: 14px; font-weight: bold; }
 
-        .recommendation-module { width: 100%; background: #fff; border-radius: 12px; padding: 15px; flex-shrink: 0; }
-        .module-title { font-size: 15px; font-weight: bold; border-left: 4px solid #FFD700; padding-left: 10px; margin-bottom: 10px; color:#FFD700; display:block; text-align:left;}
-        .rec-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; font-size: 12px; color: #333; cursor: pointer; }
-        .rec-arrow { color: #999; }
-
-        /* 促销页样式 (修复2：价格颜色) */
-        .offer-header { text-align: center; margin-bottom: 20px; color: #fff; flex-shrink: 0; }
-        .offer-header h2 { font-size: 24px; margin-bottom: 5px; color: #FFD700; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .price-black-card { width: 100%; background: linear-gradient(145deg, #2a0e0e, #1a0505); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 20px; flex-shrink: 0; }
-        .pc-card-title { color: #FFD700; font-size: 18px; font-weight: bold; margin: 0 0 20px 0; font-family: "Noto Serif SC"; letter-spacing: 1px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 15px; }
-        .pc-origin { color: #888; text-decoration: line-through; font-size: 14px; margin-bottom: 8px; }
-        
-        .pc-main-row { display: flex; justify-content: center; align-items: baseline; margin-bottom: 12px; color: #FFD700; }
-        /* 强制金色 */
-        .pc-symbol { font-size: 32px; margin-right: 5px; font-weight: bold; color: #FFD700 !important; }
-        .pc-price { font-size: 60px; font-weight: 900; line-height: 1; font-family: 'Playfair Display', serif; color: #FFD700 !important; }
-        
-        .pc-tag { background: #FFD700; color: #4a0404; font-size: 12px; padding: 2px 8px; border-radius: 4px; font-weight: bold; margin-left: 10px; position: relative; top: -15px; }
-        .pc-origin-row { margin-bottom: 15px; }
-        .pc-origin { color: rgba(255,255,255,0.5); text-decoration: line-through; font-size: 13px; }
-        .pc-desc { font-size: 12px; color: #ccc; background: rgba(255,255,255,0.1); display: inline-block; padding: 4px 15px; border-radius: 20px; }
-
-        .countdown-container { text-align: center; margin-bottom: 15px; color: #fff; flex-shrink: 0;}
-        .timer-display { font-size: 22px; color: #FFD700; font-family: monospace; font-weight: bold; letter-spacing: 2px; margin-top: 5px;}
-        .section-title { color: #bd9e59; font-size: 14px; margin: 30px 0 15px 0; opacity: 0.9; text-align: center; font-weight: bold; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 100%;}
-        .section-title::before, .section-title::after { content: ""; height: 1px; background: #bd9e59; flex: 1; margin: 0 15px; opacity: 0.5; }
-        .benefit-img { width: 100%; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.2); flex-shrink: 0;}
-        .rules-container-offer { width: 100%; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px; border: 1px dashed rgba(255,255,255,0.15); text-align: left;}
-        .rules-list { list-style: none; padding: 0; margin: 0; }
-        .rules-list li { font-size: 11px; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 4px; position: relative; padding-left: 12px; }
-        .rules-list li::before { content: '•'; position: absolute; left: 0; color: #888; }
-        .footer-note { font-size: 10px; color: rgba(255,255,255,0.3); text-align: center; margin-bottom: 20px; flex-shrink: 0; }
-
-        /* Toast 与 弹窗核心 (修复1：底部位置) */
-        .toast { 
-            position: fixed; bottom: 20%; left: 50%; transform: translateX(-50%); 
-            background: #000; color: #fff; padding: 12px 24px; border-radius: 8px; 
-            font-size: 14px; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); white-space: nowrap;
+        .coupon-ticket {
+            display: flex;
+            width: 100%;
+            height: 90px;
+            background: linear-gradient(to right, #FFD700 30%, #fff 30%);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
         }
-        .toast.show { opacity: 1; }
-        
-        .modal-overlay, .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; display: none; justify-content: center; align-items: center; }
-        #loginOverlay { display: none; }
-        
-        /* 登录弹窗 (H5 底部滑出) */
-        .login-box-slide { 
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: #fff; border-radius: 20px 20px 0 0; padding: 25px 25px 50px 25px; 
+
+        .ticket-left {
+            width: 30%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #8B0000;
+            border-right: 2px dashed rgba(139, 0, 0, 0.2);
+        }
+
+        .ticket-amount {
+            font-size: 28px;
+            font-weight: 900;
+            font-family: "Roboto Mono";
+        }
+
+        .ticket-right {
+            flex: 1;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .ticket-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .ticket-action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .ticket-btn {
+            background: #d93025;
+            color: #fff;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .recommendation-module {
+            width: 100%;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            flex-shrink: 0;
+        }
+
+        .module-title {
+            font-size: 15px;
+            font-weight: bold;
+            border-left: 4px solid #FFD700;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            color: #FFD700;
+            display: block;
+            text-align: left;
+        }
+
+        .rec-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .rec-arrow {
+            color: #999;
+        }
+
+        /* 促销页样式 */
+        .offer-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .offer-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #FFD700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .price-black-card {
+            width: 100%;
+            background: linear-gradient(145deg, #2a0e0e, #1a0505);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .pc-card-title {
+            color: #FFD700;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 20px 0;
+            font-family: "Noto Serif SC";
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 15px;
+        }
+
+        .pc-origin {
+            color: #888;
+            text-decoration: line-through;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .pc-main-row {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            margin-bottom: 12px;
+            color: #FFD700;
+        }
+
+        .pc-symbol {
+            font-size: 32px;
+            margin-right: 5px;
+            font-weight: bold;
+            color: #FFD700 !important;
+        }
+
+        .pc-price {
+            font-size: 60px;
+            font-weight: 900;
+            line-height: 1;
+            font-family: 'Playfair Display', serif;
+            color: #FFD700 !important;
+        }
+
+        .pc-tag {
+            background: #FFD700;
+            color: #4a0404;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+            position: relative;
+            top: -15px;
+        }
+
+        .pc-origin-row {
+            margin-bottom: 15px;
+        }
+
+        .pc-origin {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: line-through;
+            font-size: 13px;
+        }
+
+        .pc-desc {
+            font-size: 12px;
+            color: #ccc;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 20px;
+        }
+
+        .countdown-container {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .timer-display {
+            font-size: 22px;
+            color: #FFD700;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            color: #bd9e59;
+            font-size: 14px;
+            margin: 30px 0 15px 0;
+            opacity: 0.9;
+            text-align: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            height: 1px;
+            background: #bd9e59;
+            flex: 1;
+            margin: 0 15px;
+            opacity: 0.5;
+        }
+
+        .benefit-img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .rules-container-offer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            text-align: left;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* 弹窗核心 */
+        .modal-overlay,
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loginOverlay {
+            display: none;
+            align-items: flex-end;
+        }
+
+        .login-box-slide {
+            width: 100%;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 25px 25px 50px 25px;
             animation: slideUp 0.3s ease forwards;
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        /* 欢迎弹窗/规则弹窗 (居中) */
-        .login-box-center { width: 85%; max-width: 340px; background: #fff; border-radius: 8px; padding: 20px; position: relative; }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
 
-        .login-close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; color: #999; cursor: pointer; }
-        .btn-submit-login { width: 100%; background: #0099CC; color: #fff; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 15px; font-weight: bold;}
-        
-        .login-tabs { display: flex; gap: 20px; margin-bottom: 20px; border-bottom: none; }
-        .login-tab { font-size: 16px; color: #666; cursor: pointer; }
-        .login-tab.active { color: #333; font-weight: bold; border-bottom: 2px solid #333; padding-bottom: 4px;}
-        .login-row { display: flex; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; align-items: center; }
-        .input-clean { border: none; flex: 1; font-size: 16px; outline: none; }
-        .get-code { color: #0099CC; font-size: 14px; cursor: pointer; }
-        
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.5s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .login-box-center {
+            width: 85%;
+            max-width: 340px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .login-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .btn-submit-login {
+            width: 100%;
+            background: #0099CC;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-bottom: none;
+        }
+
+        .login-tab {
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .login-tab.active {
+            color: #333;
+            font-weight: bold;
+            border-bottom: 2px solid #333;
+            padding-bottom: 4px;
+        }
+
+        .login-row {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .input-clean {
+            border: none;
+            flex: 1;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .get-code {
+            color: #0099CC;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 微信分享引导蒙层 */
+        .share-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .share-arrow {
+            width: 80px;
+            height: auto;
+            margin-right: 25px;
+            margin-top: 10px;
+            animation: floatUp 1.2s infinite alternate;
+        }
+
+        .share-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-right: 20px;
+            text-align: right;
+            line-height: 1.5;
+            letter-spacing: 1px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <div id="app-container">
+        <div id="shareOverlay" class="share-overlay" onclick="closeShareOverlay()">
+            <svg class="share-arrow" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 80 Q 90 70 90 20 M 90 20 L 70 40 M 90 20 L 110 40" stroke="#FFD700" stroke-width="4"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-15 50 50)" />
+            </svg>
+            <div class="share-text">点击右上角 ...<br>分享给好友或朋友圈</div>
+        </div>
+
         <div class="barrons-header">
-            <div class="header-left"><div class="user-icon-placeholder" onclick="showLogin()"></div></div>
-            <div class="header-center"><img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png" alt="Barron's" class="header-logo"></div>
-            <div class="header-right"><div class="icon-en">EN</div><div class="icon-search"></div></div>
+            <div class="header-left">
+                <div class="user-icon-placeholder" onclick="showLogin()"></div>
+            </div>
+            <div class="header-center"><img
+                    src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png"
+                    alt="Barron's" class="header-logo"></div>
+            <div class="header-right">
+                <div class="icon-en">EN</div>
+                <div class="icon-search"></div>
+            </div>
         </div>
 
         <div class="decoration-top"></div>
@@ -290,7 +1139,8 @@
                         <li>巴伦精选的优质理财知识文章推荐</li>
                     </ul>
                 </div>
-                <div style="font-size:11px; color:#999; line-height:1.4; background:#f5f5f5; padding:10px; border-radius:4px; margin-bottom:20px;">
+                <div
+                    style="font-size:11px; color:#999; line-height:1.4; background:#f5f5f5; padding:10px; border-radius:4px; margin-bottom:20px;">
                     <strong>重要提示：</strong>本活动仅为投资理财知识的模拟体验与科普，所有内容均不构成任何投资建议，亦不代表对未来市场的预测。投资有风险，决策需谨慎。过往市场表现不预示未来收益，任何投资决策均应结合您自身的财务状况、风险承受能力及投资目标，并主动咨询专业财务顾问的意见。
                 </div>
                 <button class="btn-submit-login" onclick="closeWelcome()">开始挑战</button>
@@ -298,28 +1148,76 @@
         </div>
 
         <div id="page-landing" class="scrollable-page">
-            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png" class="logo-center-large">
+            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png"
+                class="logo-center-large">
 
             <div class="title-group">
                 <h1 class="main-title">2026 巴伦财富罗盘模拟挑战</h1>
                 <div class="sub-title">测测你的2026投资风格，解锁巴伦专业理财洞察！</div>
             </div>
-            
-            <div class="chart-container" id="allocationChart"><div class="chart-center-content"><div class="text-2026">2026</div></div></div>
 
-            <div class="controls-panel">
-                <div class="total-status-bar"><div class="total-label">当前总仓位</div><div class="total-value" id="totalValue">100%</div></div>
-                <div class="slider-group"><div class="slider-header"><span class="label-main c-growth">进攻 (AI/Tech)</span><span class="slider-val c-growth" id="val-growth">30%</span></div><div class="asset-expl">底层资产：AI 科技股 / 纳指 100</div><input type="range" id="range-growth" class="range-growth" min="0" max="100" value="30" oninput="handleSliderChange('range-growth')"></div>
-                <div class="slider-group"><div class="slider-header"><span class="label-main c-balance">稳健 (Dividend)</span><span class="slider-val c-balance" id="val-balance">40%</span></div><div class="asset-expl">底层资产：短期美债 / 高股息红利股</div><input type="range" id="range-balance" class="range-balance" min="0" max="100" value="40" oninput="handleSliderChange('range-balance')"></div>
-                <div class="slider-group"><div class="slider-header"><span class="label-main c-hedge">对冲 (Gold/Crypto)</span><span class="slider-val c-hedge" id="val-hedge">30%</span></div><div class="asset-expl">底层资产：黄金 (Gold) / 大宗商品 / BTC</div><input type="range" id="range-hedge" class="range-hedge" min="0" max="100" value="30" oninput="handleSliderChange('range-hedge')"></div>
+            <div class="chart-container" id="allocationChart">
+                <div class="chart-center-content">
+                    <div class="text-2026">2026</div>
+                </div>
             </div>
 
-            <div class="section-container">
+            <div class="controls-panel">
+                <div class="total-status-bar">
+                    <div class="total-label">当前总仓位</div>
+                    <div class="total-value" id="totalValue">100%</div>
+                </div>
+                <div class="slider-group">
+                    <div class="slider-header"><span class="label-main c-growth">进攻 (AI/Tech)</span><span
+                            class="slider-val c-growth" id="val-growth">30%</span></div>
+                    <div class="asset-expl">底层资产：AI 科技股 / 纳指 100</div><input type="range" id="range-growth"
+                        class="range-growth" min="0" max="100" value="30" oninput="handleSliderChange('range-growth')">
+                </div>
+                <div class="slider-group">
+                    <div class="slider-header"><span class="label-main c-balance">稳健 (Dividend)</span><span
+                            class="slider-val c-balance" id="val-balance">40%</span></div>
+                    <div class="asset-expl">底层资产：短期美债 / 高股息红利股</div><input type="range" id="range-balance"
+                        class="range-balance" min="0" max="100" value="40"
+                        oninput="handleSliderChange('range-balance')">
+                </div>
+                <div class="slider-group">
+                    <div class="slider-header"><span class="label-main c-hedge">对冲 (Gold/Crypto)</span><span
+                            class="slider-val c-hedge" id="val-hedge">30%</span></div>
+                    <div class="asset-expl">底层资产：黄金 (Gold) / 大宗商品 / BTC</div><input type="range" id="range-hedge"
+                        class="range-hedge" min="0" max="100" value="30" oninput="handleSliderChange('range-hedge')">
+                </div>
+            </div>
+
+            <div class="section-container" id="taskSection">
                 <div class="section-header"><span>⚡ 做任务，获取评测次数</span></div>
-                <div class="task-row"><div class="task-icon">📅</div><div class="task-info"><div class="task-title">每日签到</div><div class="task-sub">每天一次，保持关注</div></div><button class="task-btn" id="btn-checkin" onclick="doTask('checkin')">签到</button></div>
-                <div class="task-row"><div class="task-icon">💬</div><div class="task-info"><div class="task-title">分享给微信好友</div><div class="task-sub">邀请好友测运势</div></div><button class="task-btn" id="btn-shareF" onclick="doTask('shareFriend')">去分享</button></div>
-                <div class="task-row"><div class="task-icon">⭕</div><div class="task-info"><div class="task-title">分享微信朋友圈</div><div class="task-sub">让更多人看到你的好运</div></div><button class="task-btn" id="btn-shareM" onclick="doTask('shareMoments')">去分享</button></div>
-                <div class="task-row"><div class="task-icon">📖</div><div class="task-info"><div class="task-title">阅读深度文章</div><div class="task-sub">洞察2026市场先机</div></div><button class="task-btn" id="btn-read" onclick="doTask('read')">去阅读</button></div>
+                <div class="task-row">
+                    <div class="task-icon">📅</div>
+                    <div class="task-info">
+                        <div class="task-title">每日签到</div>
+                        <div class="task-sub">每天一次，保持关注</div>
+                    </div><button class="task-btn" id="btn-checkin" onclick="doTask('checkin')">签到</button>
+                </div>
+                <div class="task-row">
+                    <div class="task-icon">💬</div>
+                    <div class="task-info">
+                        <div class="task-title">分享给微信好友</div>
+                        <div class="task-sub">邀请好友测运势</div>
+                    </div><button class="task-btn" id="btn-shareF" onclick="doTask('shareFriend')">去分享</button>
+                </div>
+                <div class="task-row">
+                    <div class="task-icon">⭕</div>
+                    <div class="task-info">
+                        <div class="task-title">分享微信朋友圈</div>
+                        <div class="task-sub">让更多人看到你的好运</div>
+                    </div><button class="task-btn" id="btn-shareM" onclick="doTask('shareMoments')">去分享</button>
+                </div>
+                <div class="task-row">
+                    <div class="task-icon">📖</div>
+                    <div class="task-info">
+                        <div class="task-title">阅读深度文章</div>
+                        <div class="task-sub">洞察2026市场先机</div>
+                    </div><button class="task-btn" id="btn-read" onclick="doTask('read')">去阅读</button>
+                </div>
             </div>
 
             <div class="section-container">
@@ -336,21 +1234,31 @@
 
         <div class="action-area-sticky" id="landingAction">
             <button class="btn-main" id="drawBtn" onclick="analyzePortfolio()">生成配置评测</button>
-            <div class="hint-text" id="drawHint">今日剩余机会：97/100 次</div>
+            <div class="hint-text" id="drawHint">今日剩余机会：5/5 次</div>
         </div>
 
-        <div id="page-result" class="scrollable-page hidden">
-            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png" class="logo-center-large">
+        <div id="page-result" class="scrollable-page hidden" style="position: static;">
+            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png"
+                class="logo-center-large">
 
             <div class="report-card">
-                <div style="position:absolute; top:15px; right:15px; width:60px; height:60px; border:3px solid #8B0000; border-radius:50%; color:#8B0000; display:flex; justify-content:center; align-items:center; font-size:12px; font-weight:900; transform:rotate(-15deg); opacity:0.8;">VERIFIED</div>
+                <div
+                    style="position:absolute; top:15px; right:15px; width:60px; height:60px; border:3px solid #8B0000; border-radius:50%; color:#8B0000; display:flex; justify-content:center; align-items:center; font-size:12px; font-weight:900; transform:rotate(-15deg); opacity:0.8;">
+                    VERIFIED</div>
                 <div class="report-header-hint">恭喜您完成投资风险探索</div>
                 <h3 class="report-title" id="res-title"></h3>
                 <div class="bar-chart" id="res-bar"></div>
                 <p class="report-desc" id="res-desc"></p>
-                <div class="barrons-advice"><div class="advice-label">BARRON'S TAKE</div><div class="advice-text" id="res-advice"></div></div>
+                <div class="master-quote-box">
+                    <div class="master-name" id="res-master-name"></div>
+                    <div class="master-text" id="res-master-text"></div>
+                </div>
+                <div class="barrons-advice">
+                    <div class="advice-label">BARRON'S TAKE</div>
+                    <div class="advice-text" id="res-advice"></div>
+                </div>
             </div>
-            
+
             <div class="risk-warning-box">
                 风险提示：本活动仅为投资理财知识模拟与普及，所有内容不构成任何具体的投资建议或对未来市场的预测。投资涉及风险，过往表现不代表未来收益。任何投资决策都应基于您自身的财务状况、风险承受能力和投资目标，并咨询专业的财务顾问。
             </div>
@@ -358,33 +1266,58 @@
             <div class="module-title" style="margin-top:20px; color:#FFD700; border-left-color:#FFD700;">专属礼遇</div>
             <div class="coupon-premium-wrapper" id="static-coupon">
                 <div class="coupon-ticket" onclick="goToOffer()">
-                    <div class="ticket-left"><div class="ticket-val-row"><span class="ticket-symbol">¥</span><span class="ticket-amount" id="ticketAmount">--</span></div><div class="ticket-label">优惠券</div></div>
-                    <div class="ticket-right"><div class="ticket-title">巴伦菁英创始会员</div><div class="ticket-desc">限时礼遇 · 畅读全球深度财报</div><div class="ticket-action-row"><div class="ticket-timer">⏳ <span id="ticketTimer">04:59:59</span></div><button class="ticket-btn">立即使用 &gt;</button></div></div>
+                    <div class="ticket-left">
+                        <div class="ticket-val-row"><span class="ticket-symbol">¥</span><span class="ticket-amount"
+                                id="ticketAmount">--</span></div>
+                        <div class="ticket-label">优惠券</div>
+                    </div>
+                    <div class="ticket-right">
+                        <div class="ticket-title">巴伦菁英创始会员</div>
+                        <div class="ticket-desc">限时礼遇 · 畅读全球深度财报</div>
+                        <div class="ticket-action-row">
+                            <div class="ticket-timer">⏳ <span id="ticketTimer">04:59:59</span></div><button
+                                class="ticket-btn">立即使用 &gt;</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="module-title" style="margin-top:10px; color:#FFD700; border-left-color:#FFD700;">巴伦精选 · 市场前瞻</div>
+            <div class="module-title" style="margin-top:10px; color:#FFD700; border-left-color:#FFD700;">巴伦精选 · 市场前瞻
+            </div>
             <div class="recommendation-module" style="margin-top:0;">
                 <ul class="rec-list">
-                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'"><span class="rec-title">2026年全球市场展望：在不确定性中寻找确定性收益</span><span class="rec-arrow">></span></li>
-                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'"><span class="rec-title">科技股估值泡沫破裂？华尔街顶级分析师的最新研判</span><span class="rec-arrow">></span></li>
-                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'"><span class="rec-title">降息周期开启，高股息策略能否跑赢大盘？</span><span class="rec-arrow">></span></li>
-                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'"><span class="rec-title">黄金与比特币：谁才是真正的抗通胀之王？</span><span class="rec-arrow">></span></li>
-                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'"><span class="rec-title">新兴市场崛起：印度与东南亚的投资机会全解析</span><span class="rec-arrow">></span></li>
+                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'">
+                        <span class="rec-title">2026年全球市场展望：在不确定性中寻找确定性收益</span><span class="rec-arrow">></span>
+                    </li>
+                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'">
+                        <span class="rec-title">科技股估值泡沫破裂？华尔街顶级分析师的最新研判</span><span class="rec-arrow">></span>
+                    </li>
+                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'">
+                        <span class="rec-title">降息周期开启，高股息策略能否跑赢大盘？</span><span class="rec-arrow">></span>
+                    </li>
+                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'">
+                        <span class="rec-title">黄金与比特币：谁才是真正的抗通胀之王？</span><span class="rec-arrow">></span>
+                    </li>
+                    <li class="rec-item" onclick="window.location.href='https://www.barrons.com.cn/original/article'">
+                        <span class="rec-title">新兴市场崛起：印度与东南亚的投资机会全解析</span><span class="rec-arrow">></span>
+                    </li>
                 </ul>
             </div>
-        </div>
-        
-        <div class="sticky-coupon-bar" id="stickyCouponBar" onclick="goToOffer()">
-            <div class="sticky-text">专享优惠券 ¥<span id="stickyAmount">--</span></div>
-            <button class="sticky-btn">立即使用</button>
+            <div class="action-area-sticky" id="resultAction">
+                <button class="btn-main btn-coupon-sticky" onclick="goToOffer()">立即使用 ¥<span id="stickyAmount">--</span>
+                    优惠券</button>
+            </div>
         </div>
 
         <div id="page-offer" class="scrollable-page hidden">
-            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png" class="logo-center-large">
+            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png"
+                class="logo-center-large">
 
-            <div class="offer-header"><h2>马年限定礼遇</h2><p>助你在2026美股市场一马当先</p></div>
-            
+            <div class="offer-header">
+                <h2>马年限定礼遇</h2>
+                <p>助你在2026美股市场一马当先</p>
+            </div>
+
             <div class="price-black-card">
                 <h1 class="pc-card-title">巴伦菁英创始会员年卡</h1>
                 <div class="pc-main-row">
@@ -395,25 +1328,39 @@
                 <div class="pc-desc" id="offer-daily-price">已比官网渠道价还优惠180元</div>
             </div>
 
-            <div class="countdown-container"><div class="countdown-label">优惠失效倒计时</div><div class="timer-display" id="offerTimer">04:59:59</div></div>
-            <div class="btn-wrapper" style="width: 100%; margin-bottom: 20px; animation: cardSlideUp 1s ease; flex-shrink: 0;"><button class="btn-main" onclick="alert('即将跳转支付网关...')">开启马年财运</button></div>
-            
+            <div class="countdown-container">
+                <div class="countdown-label">优惠失效倒计时</div>
+                <div class="timer-display" id="offerTimer">04:59:59</div>
+            </div>
+            <div class="btn-wrapper"
+                style="width: 100%; margin-bottom: 20px; animation: cardSlideUp 1s ease; flex-shrink: 0;"><button
+                    class="btn-main" onclick="alert('即将跳转支付网关...')">开启马年财运</button></div>
+
             <h3 class="section-title" style="color:#fff; margin-bottom:15px;">会员核心权益</h3>
-            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768794382_315d133577c4362dac71.jpg" alt="会员权益介绍" class="benefit-img">
-            
+            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768794382_315d133577c4362dac71.jpg"
+                alt="会员权益介绍" class="benefit-img">
+
             <div class="rules-container-offer">
                 <div class="rules-title">活动规则说明：</div>
-                <ul class="rules-list"><li>活动时间：即日起至2026年2月12日。</li><li>优惠对象：本优惠仅限巴伦中文网注册用户参与。</li><li>权益发放：订阅成功后，会员权益将即时发放。</li><li>虚拟商品，售出不退。</li></ul>
+                <ul class="rules-list">
+                    <li>活动时间：即日起至2026年2月12日。</li>
+                    <li>优惠对象：本优惠仅限巴伦中文网注册用户参与。</li>
+                    <li>权益发放：订阅成功后，会员权益将即时发放。</li>
+                    <li>虚拟商品，售出不退。</li>
+                </ul>
             </div>
             <div class="footer-note">*活动最终解释权归巴伦中文网所有</div>
         </div>
 
         <div id="page-coupon-list" class="scrollable-page hidden" style="background:#4a0404; padding-bottom: 20px;">
-            <div class="barrons-header" style="width:100%; justify-content:center; position:relative; background:#fff; margin-bottom:20px; border-radius:0 0 8px 8px; flex-shrink:0;">
-                <div style="position:absolute; left:15px; font-size:24px; cursor:pointer;" onclick="backToHome()">&lt;</div>
+            <div class="barrons-header"
+                style="width:100%; justify-content:center; position:relative; background:#fff; margin-bottom:20px; border-radius:0 0 8px 8px; flex-shrink:0;">
+                <div style="position:absolute; left:15px; font-size:24px; cursor:pointer;" onclick="backToHome()">&lt;
+                </div>
                 <div style="font-weight:bold; font-size:16px;">我的优惠券</div>
             </div>
-            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png" class="logo-center-large">
+            <img src="https://admin.barrons.com.cn/uploads/cover_image/2026/01/19/1768790601_a5adc63e4ca8b95da3db.png"
+                class="logo-center-large">
             <div id="full-coupon-list" style="width:100%; padding:0;"></div>
             <div class="page-footer">
                 <div class="footer-link" onclick="showRules()">ⓘ 活动规则详情</div>
@@ -421,14 +1368,20 @@
             </div>
         </div>
 
-        <div id="loginOverlay" class="login-overlay" style="display:none;" onclick="closeLogin()">
+        <div id="loginOverlay" class="modal-overlay" style="display:none;" onclick="closeLogin()">
             <div class="login-box-slide" onclick="event.stopPropagation()">
                 <div class="login-close-btn" onclick="closeLogin()">×</div>
                 <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:20px;">登录 / 注册</div>
-                <div class="login-tabs"><div class="login-tab active">验证码登录</div><div class="login-tab">账号密码登录</div></div>
+                <div class="login-tabs">
+                    <div class="login-tab active">验证码登录</div>
+                    <div class="login-tab">账号密码登录</div>
+                </div>
                 <div class="login-form-group">
-                    <div class="login-row"><span style="font-size:14px;font-weight:bold;margin-right:10px;">+86</span><input type="tel" class="input-clean" placeholder="手机号"></div>
-                    <div class="login-row"><input type="text" class="input-clean" placeholder="验证码"><span class="get-code">获取验证码</span></div>
+                    <div class="login-row"><span
+                            style="font-size:14px;font-weight:bold;margin-right:10px;">+86</span><input type="tel"
+                            class="input-clean" placeholder="手机号"></div>
+                    <div class="login-row"><input type="text" class="input-clean" placeholder="验证码"><span
+                            class="get-code">获取验证码</span></div>
                 </div>
                 <button class="btn-submit-login" onclick="performLogin()">登录</button>
             </div>
@@ -442,112 +1395,269 @@
                     <p>1. 活动时间：即日起至2026年2月12日。</p>
                     <p>2. 用户通过滑动滑块配置资产比例，生成个性化投资评测。</p>
                     <p>3. 资产配置总和必须大于0%方可生成报告，且不能超过100%。</p>
-                    <p>4. 每日有100次免费评测机会，可通过完成任务增加次数。</p>
+                    <p>4. 每日有5次免费评测机会，次数用完后可通过完成任务增加。</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 逻辑部分 ---
-        const strategyDatabase = {
-            "Aggressive": [{ title: "激进成长型", desc: "您重仓AI与科技股，显示出对技术变革的强烈信心...", advice: "“在享受泡沫的同时，请时刻关注美联储的流动性拐点。”" }],
-            "Conservative": [{ title: "现金流收割者", desc: "您偏爱美债与红利股，说明您深谙复利之道...", advice: "“确定的票息是穿越周期的氧气，请继续保持耐心。”" }],
-            "Hedge": [{ title: "危机猎手型", desc: "您大幅超配黄金与大宗商品，表明您对地缘政治...", advice: "“避险是手段而非目的，当市场恐慌情绪消退时，需警惕回调。”" }],
-            "Balanced": [{ title: "多元平衡型", desc: "您的配置展现出极佳的平衡感。在2026年的震荡市中...", advice: "“均衡不代表平庸。建议定期再平衡投资组合。”" }]
+        // 1. GMM 核心配置
+        const GMM_CLUSTERS = {
+            "Aggressive": { mean: [80, 10, 10], sigma: 400 },
+            "Defensive": { mean: [10, 80, 10], sigma: 400 },
+            "MacroHedge": { mean: [10, 10, 80], sigma: 400 },
+            "Barbell": { mean: [45, 10, 45], sigma: 300 },
+            "Fortress": { mean: [10, 45, 45], sigma: 300 },
+            "CoreSatellite": { mean: [45, 45, 10], sigma: 300 },
+            "AllWeather": { mean: [33, 33, 33], sigma: 200 }
         };
-        function calculateProfile(g, b, h) {
-            const total = g + b + h;
-            if (total === 0) return "Balanced";
-            const pG = (g / total) * 100; const pB = (b / total) * 100; const pH = (h / total) * 100;
-            if (pH >= 35) return "Hedge"; if (pG >= 65) return "Aggressive"; if (pB >= 65) return "Conservative";
-            const maxVal = Math.max(pG, pB, pH);
-            if (maxVal === pG) return "Aggressive";
-            if (maxVal === pB) return "Conservative";
-            return "Balanced";
-        }
-        function getStrategyContent(p) { return strategyDatabase[p][0]; }
 
-        const BASE_DAILY_LIMIT = 100; const ORIGINAL_PRICE = 1080;
+        function calculateProfile(g, b, h) {
+            let maxProb = -1;
+            let bestFit = "AllWeather";
+            for (const [key, cluster] of Object.entries(GMM_CLUSTERS)) {
+                const distSq = Math.pow(g - cluster.mean[0], 2) + Math.pow(b - cluster.mean[1], 2) + Math.pow(h - cluster.mean[2], 2);
+                const probability = Math.exp(-distSq / (2 * cluster.sigma));
+                if (probability > maxProb) { maxProb = probability; bestFit = key; }
+            }
+            return bestFit;
+        }
+
+        // 2. 策略文案库 (V3.0 严谨版 - 70+ 组)
+        const strategyDatabase = {
+            // 1. 激进成长型 (Growth > 60%)
+            "Aggressive": [
+                { title: "奇点信仰者", desc: "AI 概率模型显示，您的配置与其说是在投资，不如说是在押注人类的未来。您重仓 AI 与科技股，显示出对技术变革的强烈信心。高波动是您为了获取指数级 Alpha 收益而必须支付的门票。", master: "凯瑟琳·伍德 (Cathie Wood)", quote: "“颠覆性创新通常在早期被误解，且波动剧烈。”", advice: "“⚠️ 风险提示：估值泡沫是悬在头顶的剑。请密切关注‘美联储利率点阵图’，流动性拐点往往是成长股的杀手。”" },
+                { title: "硅谷梦想家", desc: "您的资产组合充斥着硅谷的激进基因。相比于当下的现金流，您更看重未来的市梦率。在2026年的科技军备竞赛中，您选择站在了生产力变革的最前沿。", master: "孙正义 (Masayoshi Son)", quote: "“聪明人比不过疯子，我们不仅要看未来，还要制造未来。”", advice: "“⚠️ 风险提示：科技股的高贝塔属性意味着在熊市中回撤巨大。建议配置少量看跌期权作为下跌保护。”" },
+                { title: "早期狩猎者", desc: "您偏爱那些处于爆发前夜的资产。无论是早期的互联网还是现在的 AGI，您总是试图在渗透率越过 10% 的临界点前重仓买入。您是典型的风险偏好型投资者。", master: "彼得·蒂尔 (Peter Thiel)", quote: "“竞争是给失败者准备的，我们要寻找的是垄断。”", advice: "“⚠️ 风险提示：警惕伪需求与技术证伪。建议订阅巴伦《科技独角兽深度研报》，甄别真正的垄断者。”" },
+                { title: "波动率冲浪手", desc: "大多数人恐惧波动，而您享受波动。您的仓位集中在高弹性的成长股中，这意味着您深知‘盈亏同源’的道理，试图通过择时或选股获得超越大盘的超额收益。", master: "杰西·利弗莫尔 (Jesse Livermore)", quote: "“大钱不是在这个或那个股票中赚到的，而是在耐心持有中赚到的。”", advice: "“⚠️ 风险提示：高波动资产最忌讳频繁交易。建议设定严格的动态止盈线，防止过山车行情。”" },
+                { title: "破坏式创新信徒", desc: "您对传统行业兴趣寥寥，目光紧锁那些能‘重塑规则’的公司。您的投资哲学是：在这个指数级变化的时代，最大的风险就是不冒风险。", master: "詹姆斯·安德森 (James Anderson)", quote: "“真正的回报来自于极少数能够改变世界的公司。”", advice: "“⚠️ 风险提示：创新往往伴随着高失败率。建议适当分散持仓，避免单押一只股票的黑天鹅风险。”" },
+                { title: "阿尔法捕手", desc: "您不满足于市场的平均收益（Beta），而是渴望通过激进的配置捕获超额收益（Alpha）。这显示了您对自身选股能力或赛道判断力的极度自信。", master: "朱利安·罗伯逊 (Julian Robertson)", quote: "“如果你对自己的观点有信心，就要敢于下重注。”", advice: "“⚠️ 风险提示：自信与自负只有一线之隔。建议定期审视持仓逻辑，避免陷入‘确认偏误’的陷阱。”" },
+                { title: "成长股狙击手", desc: "您的弹药库里装满了高增长的标的。在低利率环境下，这类资产是市场的宠儿；但在高利率环境下，它们也最脆弱。您的风格极其鲜明，甚至带有赌性。", master: "威廉·欧奈尔 (William O'Neil)", quote: "“不要买便宜的股票，要买正在上涨的股票。”", advice: "“⚠️ 风险提示：成长股的杀估值阶段极其残忍。建议关注纳指 100 的技术形态，跌破均线时需果断减仓。”" },
+                { title: "未来主义者", desc: "您用真金白银投票给了‘明天’。无论市场噪音如何，您坚信科技进步是推动财富增长的唯一引擎。您的持仓列表就是一份人类未来的愿景清单。", master: "马克·安德森 (Marc Andreessen)", quote: "“软件正在吞噬世界，而 AI 将吞噬软件。”", advice: "“⚠️ 风险提示：愿景很美好，财报很残酷。建议密切关注持仓公司的自由现金流转正节点。”" },
+                { title: "风险拥抱者", desc: "您深知‘富贵险中求’。您的配置极具攻击性，试图通过承担市场不愿承担的风险，来换取市场无法企及的回报。这是勇敢者的游戏。", master: "比尔·米勒 (Bill Miller)", quote: "“如果你总是跟随共识，你只能获得共识的收益。”", advice: "“⚠️ 风险提示：当市场流动性收紧时，您的组合将首当其冲。建议预留 10% 现金作为补仓子弹。”" },
+                { title: "纳指死忠粉", desc: "您的配置几乎就是纳斯达克指数的增强版。您相信美国科技巨头依然是全球最优质的资产，并愿意为此承受高估值的溢价。", master: "查理·芒格 (Charlie Munger)", quote: "“如果不考虑痛苦的下跌，你也就不配享受丰厚的上涨。”", advice: "“⚠️ 风险提示：科技巨头的反垄断调查是最大的灰犀牛。建议订阅巴伦会员，关注华盛顿的监管动态。”" }
+            ],
+            // 2. 现金流堡垒型 (Balance > 60%)
+            "Defensive": [
+                { title: "复利守望者", desc: "AI 识别出您的核心诉求是‘确定性’。您将资产筑成了坚固的堡垒，任凭市场风浪起，您只在乎确定的票息与复利。在降息预期下，您深知‘不亏损’是长期复利增长的第一法则。", master: "霍华德·马克斯 (Howard Marks)", quote: "“我们要做的不是击败市场，而是确保在市场最困难的时候活下来。”", advice: "“⚠️ 风险提示：最大风险是长期通胀对购买力的侵蚀。建议关注巴伦《高股息蓝筹股名单》，寻找抗通胀的现金流。”" },
+                { title: "价值挖掘机", desc: "您偏爱那些低估值、高分红的‘烟蒂股’或高等级债券。您不相信一夜暴富的神话，只相信现金流折现模型计算出的内在价值。", master: "本杰明·格雷厄姆 (Benjamin Graham)", quote: "“短期来看市场是投票机，长期来看市场是称重机。”", advice: "“⚠️ 风险提示：警惕‘价值陷阱’，即那些因基本面恶化而显得便宜的公司。建议详细阅读每份财报的负债表。”" },
+                { title: "安全边际信徒", desc: "您的配置极其保守，每一笔投资都要求有足够的安全垫。您宁愿错过牛市的疯狂，也不愿在熊市中裸奔。这是一种极具韧性的生存哲学。", master: "赛斯·卡拉曼 (Seth Klarman)", quote: "“投资的核心是风险控制，收益自然会随之而来。”", advice: "“⚠️ 风险提示：过度保守可能导致跑输通胀。建议在组合中加入 10% 的指数 ETF 以增强收益弹性。”" },
+                { title: "收息主义者", desc: "您是时间的盟友。通过债券利息和股票分红，您构建了一条源源不断的被动收入河流。无论股市涨跌，您的现金流都在叮当作响。", master: "约翰·博格 (John Bogle)", quote: "“不要在草堆里找针，直接买下整个草堆（指数）。”", advice: "“⚠️ 风险提示：降息周期会导致再投资收益率下降。建议锁定长期国债利率，避免收益率滑坡。”" },
+                { title: "深度价值派", desc: "您对热门赛道嗤之以鼻，转身拥抱那些被市场遗忘的角落。公用事业、必选消费、高评级债是您的心头好。您相信均值回归的力量。", master: "约翰·涅夫 (John Neff)", quote: "“成功的要素是逆向思维，买入不受欢迎的股票。”", advice: "“⚠️ 风险提示：均值回归的过程可能极其漫长。建议做好持有 3-5 年的心理准备，并关注分红的持续性。”" },
+                { title: "绝对收益追求者", desc: "您不关心是否跑赢大盘，只关心每年是否正收益。您的配置极度厌恶回撤，通过大比例的稳健资产来熨平波动，追求一条平滑的净值曲线。", master: "詹姆斯·西蒙斯 (James Simons)", quote: "“即使是随机的市场，也有非随机的确定性。”", advice: "“⚠️ 风险提示：低风险不代表无风险。信用债违约是您需要防范的黑天鹅。建议只配置投资级以上的债券。”" },
+                { title: "防御大师", desc: "您的投资组合就像一只缩进壳里的乌龟，坚不可摧。在市场恐慌时，您的组合往往能展现出惊人的稳定性，成为资金的避风港。", master: "杰里米·格兰瑟姆 (Jeremy Grantham)", quote: "“泡沫破裂时，只有防御者才能活下来。”", advice: "“⚠️ 风险提示：在史诗级牛市中，您可能会感到孤独。建议调整心态，坚持自己的防御逻辑。”" },
+                { title: "现金流筑墙者", desc: "您认为现金流比账面浮盈更真实。您的配置逻辑是确保即使在经济危机中，也能有钱买面包。这是一种底线思维的体现。", master: "李嘉诚", quote: "“未买先想卖，在投资前先考虑最坏的结果。”", advice: "“⚠️ 风险提示：高股息并不总是安全的，警惕那些用借债来分红的公司。建议参考巴伦《股息贵族红黑榜》。”" },
+                { title: "周期穿越者", desc: "您通过配置大量稳健资产来抵御周期的波动。您不试图预测风向，而是造一艘足够结实的船。在2026年的复杂宏观环境下，这是一种大智慧。", master: "戴维·史文森 (David Swensen)", quote: "“资产配置决定了 90% 的投资回报。”", advice: "“⚠️ 风险提示：稳健资产在通胀高企时实际回报可能为负。建议适当配置 TIPS（通胀保值债券）。”" },
+                { title: "耐心资本", desc: "您的资金属性是‘长钱’。您不急于求成，愿意慢慢变富。这种从容的心态让您能够持有那些枯燥但稳健的资产，静待时间的玫瑰绽放。", master: "查理·芒格", quote: "“等待有助于你成为一名投资者，而很多人只是疯狂的交易者。”", advice: "“⚠️ 风险提示：耐心不等于死拿。如果企业基本面发生永久性恶化，必须果断离场。”" }
+            ],
+            // 3. 宏观对冲型 (Hedge > 50%)
+            "MacroHedge": [
+                { title: "末日战备官", desc: "模型检测到极高的避险权重。您对地缘政治与法币体系持有深刻怀疑。您持有的不是投资品，而是‘末日保险’。您不看微观个股，只博弈宏观周期的崩塌与重建。", master: "乔治·索罗斯 (George Soros)", quote: "“经济史是一部基于假象和谎言的连续剧。”", advice: "“⚠️ 风险提示：避险资产在经济‘软着陆’预期增强时往往面临剧烈回调。切勿将手段当作目的。”" },
+                { title: "黄金死多头", desc: "您相信黄金是唯一的货币，其他的都是信用。在各国央行大放水的背景下，您通过重仓黄金/BTC 来捍卫购买力。您是凯恩斯主义的坚定反对者。", master: "吉姆·罗杰斯 (Jim Rogers)", quote: "“当纸币不再被信任时，黄金将是唯一的救生圈。”", advice: "“⚠️ 风险提示：黄金本身不产生利息。在实际利率上升周期，金价可能承压。建议关注‘美债实际利率’指标。”" },
+                { title: "宏观狙击手", desc: "您总是站在共识的对立面。当人人谈论AI时，您在买石油和黄金。您试图利用全球宏观经济的失衡（如债务危机、货币贬值）来获取非对称的暴利。", master: "斯坦利·德鲁肯米勒 (Stanley Druckenmiller)", quote: "“我看空的不是股票，而是央行的信用。”", advice: "“⚠️ 风险提示：做空宏观是一场高难度的游戏。‘市场保持非理性的时间可能比你保持偿付能力的时间更长’。”" },
+                { title: "去中心化信徒", desc: "重仓加密货币或另类资产，显示您对现有金融秩序的极度不信任。您认为代码即法律，去中心化资产才是未来财富的方舟。", master: "中本聪 (Satoshi Nakamoto)", quote: "“如果由于信任而必须存在，那么这种系统本质上就是脆弱的。”", advice: "“⚠️ 风险提示：监管风险是悬在加密资产头上的利剑。建议密切关注 SEC 的最新动向及巴伦的政策解读。”" },
+                { title: "危机猎人", desc: "大多数人恐惧危机，而您在等待危机。您的组合在和平时期可能跑输大盘，但一旦黑天鹅降临，您的回报将是惊人的。您在做多‘波动率’。", master: "保罗·都铎·琼斯 (Paul Tudor Jones)", quote: "“你应该在这就是顶部的假设下进行交易。”", advice: "“⚠️ 风险提示：等待危机的成本很高（负利差）。建议使用期货或期权等衍生品工具来降低持仓成本。”" },
+                { title: "通胀交易员", desc: "您认为高通胀将长期伴随。大宗商品、能源、贵金属是您的核心持仓。您正在押注一场长达十年的资源超级周期。", master: "杰里米·格兰瑟姆 (Jeremy Grantham)", quote: "“我们正在进入一个资源短缺的时代。”", advice: "“⚠️ 风险提示：大宗商品周期波动剧烈且受地缘政治影响极大。建议订阅巴伦《大宗商品策略周报》。”" },
+                { title: "逆向投资者", desc: "当街上流血时，您在买入。您的配置显示出极强的逆向思维。您抛弃了拥挤的科技赛道，选择了那些被视为‘过时’甚至‘垃圾’的避险资产。", master: "约翰·坦普顿 (John Templeton)", quote: "“牛市在悲观中诞生，在怀疑中成长，在乐观中成熟，在兴奋中死亡。”", advice: "“⚠️ 风险提示：逆向投资最难的是‘左侧抄底’的煎熬。请确保您的现金流能支撑到黎明到来。”" },
+                { title: "法币做空者", desc: "您持有的实物资产占比极高，这本质上是在做空美元/法币。您认为债务货币化最终将导致恶性通胀，硬资产才是硬道理。", master: "瑞·达利欧 (Ray Dalio)", quote: "“现金是垃圾 (Cash is trash)。”", advice: "“⚠️ 风险提示：美元指数的强势反弹可能会暂时击穿您的防线。建议保留部分美元现金作为流动性对冲。”" },
+                { title: "地缘博弈家", desc: "您的投资视角超越了财经，上升到了政治。重仓石油黄金，说明您认为世界正处于分裂与动荡的边缘，冲突溢价将是未来收益的主要来源。", master: "亨利·基辛格 (Henry Kissinger)", quote: "“谁控制了石油，谁就控制了所有国家。”", advice: "“⚠️ 风险提示：地缘局势瞬息万变。建议密切关注中东及东欧局势，灵活调整避险仓位。”" },
+                { title: "崩盘期权买家", desc: "您的组合结构类似于持有一张长期的‘看跌期权’。您为此支付保费（机会成本），只为在系统性风险爆发时获得几十倍的回报。", master: "迈克尔·伯里 (Michael Burry)", quote: "“人们总是盲目乐观，直到大厦崩塌。”", advice: "“⚠️ 风险提示：做空就像在压路机前捡硬币。请务必控制仓位，不要在危机到来前耗尽筹码。”" }
+            ],
+            // 4. 哑铃策略型 (G+H > 70%)
+            "Barbell": [
+                { title: "反脆弱构建者", desc: "您的组合呈现出典型的‘哑铃结构’。模型分析显示，您极度厌恶平庸的中间地带。左手重仓科技博取暴利，右手囤积黄金防守崩溃。这是一场‘非对称收益’的棋局——要么大胜，要么不输。", master: "纳西姆·塔勒布 (Nassim Taleb)", quote: "“不去预测黑天鹅，而是从混乱中获益。”", advice: "“⚠️ 风险提示：哑铃策略的死穴是‘温和的慢牛市’，会导致两端跑输。需精准把握再平衡（Rebalancing）时机。”" },
+                { title: "极端主义者", desc: "您放弃了平庸的债券和蓝筹股，选择了两个极端：极度冒险的成长股和极度保守的黄金。这种两极分化的配置，旨在捕捉两边的黑天鹅事件。", master: "纳西姆·塔勒布", quote: "“杠铃策略：一面是极度的风险厌恶，一面是极度的风险偏好。”", advice: "“⚠️ 风险提示：这种组合波动极大，极其考验心理素质。建议设定季度再平衡机制，强制高抛低吸。”" },
+                { title: "非对称收益猎手", desc: "您在寻找赔率不对称的机会。科技股提供了上不封顶的看涨期权，黄金提供了下有保底的看跌期权。您不预测中间态，只押注两端。", master: "乔治·索罗斯", quote: "“重要的不是你对错的概率，而是你对的时候赚了多少，错的时候亏了多少。”", advice: "“⚠️ 风险提示：如果市场长期横盘震荡，您的组合将面临‘双杀’磨损。建议关注巴伦的波动率策略分析。”" },
+                { title: "双核驱动者", desc: "您的引擎是双核的：进攻核（AI）负责拉升上限，防守核（黄金）负责兜住下限。这种组合在市场发生剧烈变动（无论向上向下）时都能获益。", master: "大卫·泰普 (David Tepper)", quote: "“这种时候，你必须既做多又做空。”", advice: "“⚠️ 风险提示：相关性风险。在极端流动性危机中，黄金和科技股可能同时下跌。建议保留 10% 的现金作为润滑剂。”" },
+                { title: "中庸厌恶者", desc: "您认为传统的 60/40 股债平衡策略已经失效。在2026年，要么拥抱泡沫，要么拥抱避险，中间路线死路一条。您的配置非常激进且鲜明。", master: "彼得·蒂尔", quote: "“最激烈的竞争往往在最平庸的赛道。”", advice: "“⚠️ 风险提示：您的组合缺乏产生稳定现金流的资产。建议用少量分红股替代部分黄金仓位以增强韧性。”" },
+                { title: "黑天鹅捕手", desc: "无论是科技爆发的‘正向黑天鹅’，还是金融危机的‘负向黑天鹅’，您的组合都能从中受益。您最怕的不是危机，而是死水一潭。", master: "马克·斯皮茨纳格尔 (Mark Spitznagel)", quote: "“我们的目标是拥有在危机中爆发性增值的资产。”", advice: "“⚠️ 风险提示：时间是您的敌人。如果在您等待黑天鹅的期间市场一直平稳，您的收益率将大幅跑输。”" },
+                { title: "两极配置家", desc: "您将资金分配在风险光谱的两个极端。这种配置看似分裂，实则逻辑自洽：用最安全的资产保护本金，用最激进的资产博取收益。", master: "哈里·布朗 (Harry Browne)", quote: "“永远不要把你所有的鸡蛋放在一个篮子里，但也不要放在普通的篮子里。”", advice: "“⚠️ 风险提示：需要严格的纪律来维持两端的比例。建议每当一端占比超过 60% 时进行强制再平衡。”" },
+                { title: "风险对冲赌客", desc: "您本质上是在赌博，但您给自己的赌局买了保险。AI 科技股是您的筹码，黄金是您的退路。这是一种聪明的赌博方式。", master: "保罗·都铎·琼斯", quote: "“防守比进攻重要十倍。”", advice: "“⚠️ 风险提示：当科技股回调而金价不涨时，您的心态容易崩塌。请务必坚持长期主义。”" },
+                { title: "混乱受益者", desc: "世界越混乱，您的组合越强韧。科技股受益于技术变革的混乱，黄金受益于地缘政治的混乱。您是混乱秩序下的既得利益者。", master: "纳西姆·塔勒布", quote: "“风会熄灭蜡烛，却能使火越烧越旺。”", advice: "“⚠️ 风险提示：若世界进入长期和平与繁荣的低通胀时期，您的组合表现将垫底。建议关注宏观局势变化。”" },
+                { title: "矛与盾掌控者", desc: "您左手持最锋利的矛（AI），右手持最坚固的盾（Gold）。这种攻守兼备但互不干扰的配置，展现了极高的战术素养。", master: "孙子", quote: "“凡战者，以正合，以奇胜。”", advice: "“⚠️ 风险提示：矛可能折断，盾可能生锈。建议定期检查科技股的成长逻辑和黄金的避险逻辑是否依然成立。”" }
+            ],
+            // 5. 避险堡垒型 (B+H > 70%)
+            "Fortress": [
+                { title: "避险堡垒筑城师", desc: "AI 判定您为极度防御型投资者。您不仅用债券获取利息，还叠加了黄金抵御通胀。这是一种‘无论经济好坏，我只要本金安全’的极低风险偏好，构建了双重安全垫。", master: "本杰明·格雷厄姆 (Benjamin Graham)", quote: "“投资的第一原则是不要亏损，第二原则是记住第一条。”", advice: "“⚠️ 风险提示：您几乎完全放弃了增长机会。若2026年迎来科技牛市，您将面临巨大的踏空风险。”" },
+                { title: "绝对安全主义者", desc: "您的字典里没有‘亏损’二字。债+金的组合几乎屏蔽了股市的所有波动。您宁愿跑输大盘，也不愿看到账户出现回撤。", master: "塞思·卡拉曼", quote: "“不仅要看回报，还要看获得回报所承担的风险。”", advice: "“⚠️ 风险提示：长期来看，您的最大风险是跑输通胀。建议配置 5-10% 的高分红股票作为通胀对冲。”" },
+                { title: "极简防御派", desc: "您对股市的繁荣持有深深的怀疑。您的配置逻辑非常简单：利息收入覆盖生活，黄金持仓对抗意外。这是一种极简主义的生存智慧。", master: "哈里·布朗", quote: "“永久组合的一半是防守，另一半也是防守。”", advice: "“⚠️ 风险提示：这种组合在经济复苏期表现极差。建议在确认经济触底后，适当增加权益类资产。”" },
+                { title: "本金守护者", desc: "您视本金为生命。债券提供了现金流，黄金提供了心理按摩。这种组合让您在任何市场环境下都能安然入睡，但代价是放弃了致富的可能。", master: "沃伦·巴菲特", quote: "“即使是美联储主席偷偷告诉我未来两年的货币政策，我也不会改变我的行动。”", advice: "“⚠️ 风险提示：如果不参与股市，您的财富阶层很难跃升。建议将每年获得的债券利息定投到指数基金中。”" },
+                { title: "滞胀交易员", desc: "您的配置非常适合‘滞胀’环境（经济停滞+通胀高企）。债券提供保底，黄金对冲通胀。您可能潜意识里认为2026年将重演1970年代。", master: "瑞·达利欧", quote: "“现金是垃圾，但在通缩时债券是王，在通胀时黄金是王。”", advice: "“⚠️ 风险提示：如果经济意外强劲增长（金发姑娘经济），您的组合将显得非常笨重。建议保持宏观敏感度。”" },
+                { title: "悲观主义保守派", desc: "您对未来经济持悲观态度。这种由硬资产和固收组成的防御工事，是为寒冬准备的。您是市场中的‘缩头乌龟’，但也可能是活得最久的。", master: "查理·芒格", quote: "“很多智商很高的人因为无法控制情绪而破产。”", advice: "“⚠️ 风险提示：悲观者正确，乐观者赚钱。不要让悲观情绪阻碍了您对优质资产的配置。”" },
+                { title: "低波信徒", desc: "您极度厌恶波动率。债+金的组合相关性低，波动率极低。您追求的是一条几乎水平但微微向上的净值曲线，稳稳的幸福。", master: "霍华德·马克斯", quote: "“波动性不是风险，永久性损失本金才是风险。”", advice: "“⚠️ 风险提示：低波动不等于无风险。如果美元信用体系崩塌，债市可能与金市背离。建议关注美元指数。”" },
+                { title: "硬资产守望者", desc: "您更相信实物（黄金）和契约（债券），而不相信公司的盈利承诺（股票）。这是一种非常传统的地主式理财思维。", master: "罗思柴尔德家族", quote: "“我不需要知道如何赚取 100% 的利润，我只需要知道如何避免 1% 的亏损。”", advice: "“⚠️ 风险提示：这是一种守富的策略，而不是创富的策略。如果是年轻人，建议适当增加风险资产比例。”" },
+                { title: "熊市躺赢家", desc: "当别人在熊市中哀嚎时，您的组合却在创新高。债券的票息和黄金的避险属性，让您成为熊市中最大的赢家。", master: "约翰·保尔森 (John Paulson)", quote: "“在别人恐慌时，你要贪婪（指做空或避险）。”", advice: "“⚠️ 风险提示：熊市不仅短，而且也是布局牛市的最佳时机。不要在熊市底部仍然满仓防守。”" },
+                { title: "风险厌恶型", desc: "您的风险偏好极低。您宁愿把钱存在‘保险箱’里，也不愿去赌场搏一把。这种配置极度稳健，但也意味着您主动放弃了时代的红利。", master: "巴菲特（早期）", quote: "“如果你不能看着你的股票下跌 50% 而不恐慌，那你就不该炒股。”", advice: "“⚠️ 风险提示：最大的风险是‘以安全的名义踏空’。建议订阅巴伦会员，了解您错过了什么机会。”" }
+            ],
+            // 6. 核心卫星型 (G+B > 70%)
+            "CoreSatellite": [
+                { title: "机构视角配置家", desc: "您的配置不仅理性，而且具有典型的‘机构范儿’。以稳健资产为核心（Core）获取市场平均收益，以进攻资产为卫星（Satellite）捕捉增强收益。进可攻，退可守。", master: "沃伦·巴菲特 (Warren Buffett)", quote: "“成功的投资不需要高等数学，只需要常识和纪律。”", advice: "“⚠️ 风险提示：平庸是唯一陷阱。如果核心资产选错了方向，会拖累整体表现。建议参考巴伦《2026 十大推荐股票》。”" },
+                { title: "股债平衡大师", desc: "您采用了经典的股债平衡策略（如 60/40）。股票负责进攻，债券负责防守。这是华尔街流行了半个世纪的黄金法则，中庸但不平庸。", master: "约翰·博格", quote: "“指数基金是消除市场风险的最好工具。”", advice: "“⚠️ 风险提示：股债相关性正变得不稳定。在通胀高企时，股债可能双杀。建议加入少量商品资产作为补丁。”" },
+                { title: "理性实干家", desc: "您既不盲目狂热，也不过分悲观。您相信经济长期向上（配置股票），但也承认周期波动（配置债券）。这是最符合中产阶级利益的配置。", master: "彼得·林奇 (Peter Lynch)", quote: "“不仅要用脑子投资，还要用肚子（胆量）投资。”", advice: "“⚠️ 风险提示：在极端行情下，这种‘中间路线’可能两头不讨好。建议设定动态再平衡机制。”" },
+                { title: "稳中求进派", desc: "您的底仓非常扎实（债券），同时保留了向上的弹性（科技股）。您不追求一夜暴富，但要求财富每年稳健增值。这是长跑冠军的配置。", master: "菲利普·费雪 (Philip Fisher)", quote: "“保守的投资者夜夜安枕。”", advice: "“⚠️ 风险提示：科技股的波动可能会击穿您的心理防线。建议将科技股仓位控制在您能承受 30% 回撤的范围内。”" },
+                { title: "核心资产信徒", desc: "您相信核心资产（美债+美股）依然是全球最好的配置。您不屑于配置另类资产（黄金/币），认为那是投机。您是现代金融理论的践行者。", master: "尤金·法玛 (Eugene Fama)", quote: "“市场是有效的，不要试图战胜它，而是加入它。”", advice: "“⚠️ 风险提示：美元信用周期的逆转可能会打击股债双市。建议关注‘去美元化’趋势对核心资产的影响。”" },
+                { title: "养老金掌舵人", desc: "您的配置风格酷似大型养老基金。追求长期、稳定、可预测的回报。您规避了不可控的黄金/币，专注于有现金流支撑的资产。", master: "大卫·史文森", quote: "“机构投资的核心是资产配置，而不是选股。”", advice: "“⚠️ 风险提示：养老金模式通常期限很长。如果您的资金有短期用途，这种配置可能面临流动性错配风险。”" },
+                { title: "主流配置者", desc: "您走在最宽阔的道路上。这是目前全球最主流的配置方案，流动性好、透明度高。您不标新立异，因为相信‘大路朝天’。", master: "本杰明·格雷厄姆", quote: "“大众总是错的？不，大众在大多数时候是对的。”", advice: "“⚠️ 风险提示：当拥挤的交易发生踩踏时，主流资产跌幅可能超乎想象。建议保留 10% 的逆向仓位。”" },
+                { title: "成长防御混合体", desc: "您试图在成长与安全之间找到完美的平衡点。通过调整股债比例，您可以根据宏观环境自由切换攻防姿态。极其灵活。", master: "穆罕默德·埃尔-埃利安 (Mohamed El-Erian)", quote: "“在这个不确定的世界里，唯一确定的就是波动。”", advice: "“⚠️ 风险提示：灵活切换容易导致‘两边打脸’。如果没有足够的时间研究宏观，建议维持固定比例不动。”" },
+                { title: "传统的守卫者", desc: "您对黄金、比特币等无息资产持有偏见，坚信资产必须能产生现金流。您的组合非常传统，但也非常稳固，经得起逻辑推敲。", master: "查理·芒格", quote: "“我看不到比特币的价值，它甚至不如老鼠药。”", advice: "“⚠️ 风险提示：如果不配置另类资产，您可能错失法币贬值带来的资产重估机会。建议保持开放心态。”" },
+                { title: "均衡收益猎手", desc: "您通过股债搭配，试图获得比存款高、比股票稳的收益。这是典型的理财替代型配置，非常适合稳健增值的目标。", master: "彼得·林奇", quote: "“长期持有优质公司和债券，时间会给你回报。”", advice: "“⚠️ 风险提示：通胀是该策略的隐形杀手。若通胀长期维持在 3% 以上，建议增加抗通胀资产。”" }
+            ],
+            // 7. 全天候型 (均衡)
+            "AllWeather": [
+                { title: "全天候宏观操盘手", desc: "AI 认为您构建了一台穿越周期的永动机。您利用资产间的‘负相关性’（股票跌时有债券，法币贬值有黄金）抹平波动。您追求的不是一夜暴富，而是平稳的净值曲线。", master: "瑞·达利欧 (Ray Dalio)", quote: "“最圣杯的投资，是找到 15 个互不相关的回报流。”", advice: "“⚠️ 风险提示：全天候策略在‘普涨行情’中会显得乏力。需警惕‘股债金三杀’的极端流动性危机。”" },
+                { title: "风险平价大师", desc: "您不预测未来，而是应对未来。通过均衡配置三类资产，您确保无论经济是通胀还是通缩，增长还是衰退，您的组合总有一部分在上涨。", master: "瑞·达利欧", quote: "“谁都无法预测水晶球，唯一能做的是构建一个适应所有天气的组合。”", advice: "“⚠️ 风险提示：均衡意味着平庸的收益率。建议通过适度加杠杆或精选 ETF 来增强全天候策略的收益。”" },
+                { title: "平衡美学追求者", desc: "您的组合展现出惊人的数学美感。33/33/33 的比例看似简单，实则蕴含了‘万物对冲’的深刻哲理。您是投资界的极简主义者。", master: "哈里·布朗", quote: "“简单的规则往往比复杂的模型更有效。”", advice: "“⚠️ 风险提示：机械的平衡可能导致错过结构性牛市。建议每年进行一次动态再平衡，卖出高估资产买入低估资产。”" },
+                { title: "不可知论者", desc: "您承认自己无法预测市场，因此选择了全覆盖。这是一种极其诚实且智慧的策略。您放弃了择时，拥抱了配置。", master: "约翰·博格", quote: "“不要试图在干草堆里找针，把干草堆全买下来。”", advice: "“⚠️ 风险提示：虽然放弃了择时，但选品依然重要。建议选择低费率、跟踪误差小的宽基 ETF 构建组合。”" },
+                { title: "完美对冲家", desc: "您的每一个多头仓位，都有一个对应的对冲仓位。股票对冲债券风险，黄金对冲货币风险。您的目标是让风险相互抵消，只留下纯粹的收益。", master: "詹姆斯·西蒙斯", quote: "“我们通过对冲消除市场风险，只赚取纯粹的数学优势。”", advice: "“⚠️ 风险提示：完美的对冲往往伴随着昂贵的成本。请计算您的组合是否因为过度对冲而导致收益覆盖不了通胀。”" },
+                { title: "宏观平衡者", desc: "您站在上帝视角俯瞰资产配置。您深知各类资产轮动的规律，因此选择全部持有，静待花开。无论风往哪里吹，您的风车都在转。", master: "耶鲁基金模式", quote: "“分散化是投资中唯一的免费午餐。”", advice: "“⚠️ 风险提示：分散化不等于碎片化。持有太多相关性高的资产（如10只科技股）不是分散。请确保资产间的低相关性。”" },
+                { title: "稳健增长派", desc: "您既想要增长，又想要稳健，还想要避险。成年人的世界全都要，于是您构建了这个‘既要又要还要’的完美组合。", master: "彼得·伯恩斯坦 (Peter Bernstein)", quote: "“与其把赌注押在未来，不如构建一个能应对任何未来的组合。”", advice: "“⚠️ 风险提示：全都要的结果可能是全都平平。建议设立一个‘核心关注指标’（如十年期美债利率）作为调整权重的锚点。”" },
+                { title: "中庸之道践行者", desc: "您的配置体现了东方哲学的‘中庸’。不偏不倚，无过无不及。在极端撕裂的市场环境中，这种中正平和的持仓反而能活得最久。", master: "李嘉诚", quote: "“不疾而速。稳健中求进步。”", advice: "“⚠️ 风险提示：中庸容易被两边的极端情绪裹挟。建议保持定力，不要因为别人的暴富而焦虑改变策略。”" },
+                { title: "多资产轮动专家", desc: "您似乎准备好了进行资产轮动。今天股票涨，明天黄金涨。您的组合时刻准备着承接板块轮动的资金。这是一种被动但有效的‘守株待兔’。", master: "马丁·普林格 (Martin Pring)", quote: "“经济周期决定资产价格，而不是相反。”", advice: "“⚠️ 风险提示：如果所有资产相关性趋同（如2022年），全天候策略也会失效。建议保留现金作为最后防线。”" },
+                { title: "绝对理性人", desc: "您没有感情，全是逻辑。您通过数学比例分配资产，剔除了情绪的干扰。这是一份极其冷静、客观、反人性的投资答卷。", master: "尤金·法玛", quote: "“情绪是投资最大的敌人。”", advice: "“⚠️ 风险提示：太过理性可能会错过非理性的泡沫收益。建议用 5% 的小仓位去感受市场的非理性狂热。”" }
+            ]
+        };
+
+        function getStrategyContent(p) {
+            // 兼容性处理：如果数据库里没这个key（防止报错），默认返回全天候
+            const list = strategyDatabase[p] || strategyDatabase["AllWeather"];
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        const BASE_DAILY_LIMIT = 5;
+        const EVENT_END_DATE = new Date('2026-02-12T23:59:59').getTime();
+        const ORIGINAL_PRICE = 1080;
         const couponConfig = [{ finalPrice: 518 }, { finalPrice: 618 }, { finalPrice: 688 }, { finalPrice: 888 }];
         let currentDrawResult = null;
+        let lastScrollTop = 0;
 
-        document.addEventListener('DOMContentLoaded', () => { 
-            document.getElementById('range-growth').value=30; document.getElementById('range-balance').value=40; document.getElementById('range-hedge').value=30;
+        // 挂载 pendingTask
+        let currentPendingTask = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('range-growth').value = 30; document.getElementById('range-balance').value = 40; document.getElementById('range-hedge').value = 30;
             updateDrawUI(); updateChart(); renderCouponList();
-            if (!localStorage.getItem('barrons_welcome_boss_v17')) setTimeout(() => document.getElementById('welcomeModal').style.display='flex', 500); // flex确保居中
-            initStickyObserver();
+            if (!localStorage.getItem('barrons_welcome_boss_v22')) setTimeout(() => document.getElementById('welcomeModal').style.display = 'flex', 500);
+
+            const scrollContainer = document.getElementById('page-result');
+            if (scrollContainer) {
+                scrollContainer.addEventListener('scroll', checkStickyVisibility);
+            }
         });
 
-        function initStickyObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const stickyBar = document.getElementById('stickyCouponBar');
-                    if (!entry.isIntersecting && entry.boundingClientRect.top < 0) stickyBar.classList.add('visible');
-                    else stickyBar.classList.remove('visible');
-                });
-            });
+        // 🚀 智能吸底逻辑 (V27 核心修复：加了页面判断卫兵)
+        function checkStickyVisibility() {
+            const container = document.getElementById('page-result');
             const target = document.getElementById('static-coupon');
-            if(target) observer.observe(target);
+            const stickyAction = document.getElementById('resultAction');
+
+            if (!container || !target || !stickyAction) return;
+
+            // ⚠️ 核心修复：如果结果页是隐藏的（即用户在首页），强制隐藏吸底条并退出
+            if (container.classList.contains('hidden')) {
+                stickyAction.classList.remove('visible');
+                return;
+            }
+
+            const currentScrollTop = container.scrollTop;
+            const targetBottom = target.offsetTop + target.offsetHeight;
+
+            if (currentScrollTop > targetBottom) {
+                if (currentScrollTop < lastScrollTop) { stickyAction.classList.add('visible'); }
+                else { stickyAction.classList.remove('visible'); }
+            } else { stickyAction.classList.remove('visible'); }
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
         }
 
-        function closeWelcome() { document.getElementById('welcomeModal').style.display='none'; localStorage.setItem('barrons_welcome_boss_v17', 'true'); }
-        function showLogin() { 
-            const overlay = document.getElementById('loginOverlay');
-            overlay.style.display = 'block'; 
+        // 分享蒙层控制
+        function closeShareOverlay() {
+            document.getElementById('shareOverlay').style.display = 'none';
+            if (currentPendingTask) {
+                completeTask(currentPendingTask);
+                currentPendingTask = null;
+            }
         }
-        function closeLogin() { document.getElementById('loginOverlay').style.display='none'; }
+
+        function closeWelcome() { document.getElementById('welcomeModal').style.display = 'none'; localStorage.setItem('barrons_welcome_boss_v22', 'true'); }
+        function showLogin() { document.getElementById('loginOverlay').style.display = 'block'; }
+        function closeLogin() { document.getElementById('loginOverlay').style.display = 'none'; }
         function performLogin() { closeLogin(); alert('登录成功(模拟)'); }
-        function showRules() { document.getElementById('rulesModal').style.display='flex'; }
-        function closeRules() { document.getElementById('rulesModal').style.display='none'; }
+        function showRules() { document.getElementById('rulesModal').style.display = 'flex'; }
+        function closeRules() { document.getElementById('rulesModal').style.display = 'none'; }
 
         function handleSliderChange(id) {
             const el = document.getElementById(id); let val = parseInt(el.value);
             const g = parseInt(document.getElementById('range-growth').value); const b = parseInt(document.getElementById('range-balance').value); const h = parseInt(document.getElementById('range-hedge').value);
-            let otherSum = (id==='range-growth'?b+h : (id==='range-balance'?g+h : g+b));
-            if(val===100) { ['range-growth','range-balance','range-hedge'].forEach(k=>{ if(k!==id) document.getElementById(k).value=0; }); }
-            if(val+otherSum>100) { el.value = 100-otherSum; showToast("总仓位不能超过 100%，请先减少其他资产"); }
+            let otherSum = (id === 'range-growth' ? b + h : (id === 'range-balance' ? g + h : g + b));
+            if (val === 100) { ['range-growth', 'range-balance', 'range-hedge'].forEach(k => { if (k !== id) document.getElementById(k).value = 0; }); }
+            if (val + otherSum > 100) { el.value = 100 - otherSum; showToast("总仓位不能超过 100%，请先减少其他资产"); }
             updateChart();
         }
 
         function updateChart() {
             const g = parseInt(document.getElementById('range-growth').value); const b = parseInt(document.getElementById('range-balance').value); const h = parseInt(document.getElementById('range-hedge').value);
-            const total = g+b+h;
+            const total = g + b + h;
             document.getElementById('val-growth').innerText = g + "%";
             document.getElementById('val-balance').innerText = b + "%";
             document.getElementById('val-hedge').innerText = h + "%";
-            
             document.getElementById('totalValue').innerText = total + "%";
-            document.getElementById('totalValue').className = total===100 ? "total-value status-ok" : "total-value status-warn";
-            const dispT = total===0?1:total; const p1=(g/dispT)*100; const p2=p1+(b/dispT)*100;
+            document.getElementById('totalValue').className = total === 100 ? "total-value status-ok" : "total-value status-warn";
+            const dispT = total === 0 ? 1 : total; const p1 = (g / dispT) * 100; const p2 = p1 + (b / dispT) * 100;
             document.getElementById('allocationChart').style.background = `conic-gradient(#d32f2f 0% ${p1}%, #FFD700 ${p1}% ${p2}%, #1565C0 ${p2}% 100%)`;
             const btn = document.getElementById('drawBtn');
-            if(total>0) { btn.disabled=false; btn.innerText="生成配置评测"; } else { btn.disabled=true; btn.innerText="请配置资产"; }
+            if (total > 0) { btn.disabled = false; btn.innerText = "生成配置评测"; } else { btn.disabled = true; btn.innerText = "请配置资产"; }
         }
 
         function analyzePortfolio() {
-            if(getRemainingChances()<=0) { showToast("次数不足"); return; }
-            const btn = document.getElementById('drawBtn'); btn.innerText="分析中..."; btn.disabled=true;
+            const now = new Date().getTime();
+            if (now > EVENT_END_DATE) { showToast("活动已结束，下次再来"); return; }
+
+            // 次数不足处理
+            // 次数不足处理
+            if (getRemainingChances() <= 0) {
+                const d = getPlayData();
+                const allTasks = ['checkin', 'shareFriend', 'shareMoments', 'read'];
+                const isAllDone = allTasks.every(k => d.tasks[k]);
+
+                if (isAllDone) {
+                    showToast("今天评测机会已用完，明天再来吧");
+                } else {
+                    showToast("机会已用完，请完成任务获取更多次数");
+                    // 平滑滚动引导
+                    document.getElementById('taskSection').scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // ⚠️ 核心修复：强制隐藏吸底条，以防万一
+                document.getElementById('resultAction').classList.remove('visible');
+                return;
+            }
+
+            const btn = document.getElementById('drawBtn'); btn.innerText = "分析中..."; btn.disabled = true;
             const data = getPlayData(); data.used_count++; savePlayData(data);
-            
+
             setTimeout(() => {
-                const g=parseInt(document.getElementById('range-growth').value); 
-                const b=parseInt(document.getElementById('range-balance').value); 
-                const h=parseInt(document.getElementById('range-hedge').value);
-                const profile = calculateProfile(g,b,h); const content = getStrategyContent(profile); const cp = couponConfig[Math.floor(Math.random()*4)];
-                currentDrawResult = { title: content.title, discount: ORIGINAL_PRICE-cp.finalPrice, finalPrice: cp.finalPrice, status: 'use' };
-                
+                const g = parseInt(document.getElementById('range-growth').value);
+                const b = parseInt(document.getElementById('range-balance').value);
+                const h = parseInt(document.getElementById('range-hedge').value);
+                const profileKey = calculateProfile(g, b, h);
+                const content = getStrategyContent(profileKey); // 使用新封装的函数
+
+                const cp = couponConfig[Math.floor(Math.random() * 4)];
+                currentDrawResult = { title: content.title, discount: ORIGINAL_PRICE - cp.finalPrice, finalPrice: cp.finalPrice, status: 'use' };
+
                 document.getElementById('res-title').innerText = content.title;
                 document.getElementById('res-desc').innerText = content.desc;
+                document.getElementById('res-master-name').innerText = "大师共鸣：" + content.master;
+                document.getElementById('res-master-text').innerText = content.quote;
                 document.getElementById('res-advice').innerText = content.advice;
-                
                 document.getElementById('ticketAmount').innerText = currentDrawResult.discount;
                 document.getElementById('stickyAmount').innerText = currentDrawResult.discount;
                 document.getElementById('offer-price-num').innerText = currentDrawResult.finalPrice;
                 document.getElementById('offer-tag').innerText = `已优惠${currentDrawResult.discount}元`;
                 document.getElementById('offer-daily-price').innerText = `已比官网渠道价还优惠${currentDrawResult.discount}元`;
 
-                const tot = g+b+h||1; const p1=(g/tot)*100; const p2=(b/tot)*100; const p3=(h/tot)*100;
+                const tot = g + b + h || 1; const p1 = (g / tot) * 100; const p2 = (b / tot) * 100; const p3 = (h / tot) * 100;
                 document.getElementById('res-bar').innerHTML = `<div class="bar-seg" style="width:${p1}%; background:#d32f2f;"></div><div class="bar-seg" style="width:${p2}%; background:#FFD700;"></div><div class="bar-seg" style="width:${p3}%; background:#1565C0;"></div>`;
 
                 saveCoupon(currentDrawResult);
@@ -555,45 +1665,37 @@
                 document.getElementById('landingAction').classList.add('hidden');
                 document.getElementById('page-result').classList.remove('hidden');
                 document.getElementById('page-result').classList.add('fade-in');
-                btn.innerText="生成配置评测"; btn.disabled=false;
+                btn.innerText = "生成配置评测"; btn.disabled = false;
                 startTimer('ticketTimer');
-                initStickyObserver();
+
+                const scrollContainer = document.getElementById('page-result');
+                if (scrollContainer) {
+                    scrollContainer.removeEventListener('scroll', checkStickyVisibility);
+                    scrollContainer.addEventListener('scroll', checkStickyVisibility);
+                }
             }, 800);
         }
 
-        function saveCoupon(c) { let l = JSON.parse(localStorage.getItem('barrons_cl_v11')||"[]"); l.unshift(c); localStorage.setItem('barrons_cl_v11',JSON.stringify(l)); renderCouponList(); }
-        
+        function saveCoupon(c) { let l = JSON.parse(localStorage.getItem('barrons_cl_v23') || "[]"); l.unshift(c); localStorage.setItem('barrons_cl_v23', JSON.stringify(l)); renderCouponList(); }
         function renderCouponList() {
-            const list = JSON.parse(localStorage.getItem('barrons_cl_v11') || "[]");
+            const list = JSON.parse(localStorage.getItem('barrons_cl_v23') || "[]");
             const demoList = list.length > 0 ? list : [
-                {discount: 618, title: '稳如老马', status: 'use'},
-                {discount: 392, title: '激进成长', status: 'used'},
-                {discount: 100, title: '新手福利', status: 'expired'}
+                { discount: 618, title: '稳如老马', status: 'use' },
+                { discount: 392, title: '激进成长', status: 'used' },
+                { discount: 100, title: '新手福利', status: 'expired' }
             ];
-            
             const container = document.getElementById('coupon-list-dynamic');
             const fullContainer = document.getElementById('full-coupon-list');
-
             const generateHTML = (arr) => arr.map(c => {
                 let btnHtml = '';
                 if (c.status === 'used') btnHtml = '<button class="c-new-btn c-status-used">已使用</button>';
                 else if (c.status === 'expired') btnHtml = '<button class="c-new-btn c-status-expired">已失效</button>';
                 else btnHtml = '<button class="c-new-btn c-status-use" onclick="goToOffer()">去使用</button>';
-                return `
-                <div class="coupon-row-new">
-                    <div class="c-new-left">
-                        <div class="c-new-title">优惠金额 ¥${c.discount}</div>
-                        <div class="c-new-desc">${c.title}专属券</div>
-                        <div class="c-new-date">有效期至: 2026/03/03</div>
-                    </div>
-                    ${btnHtml}
-                </div>`;
+                return `<div class="coupon-row-new"><div class="c-new-left"><div class="c-new-title">优惠金额 ¥${c.discount}</div><div class="c-new-desc">${c.title}专属券</div><div class="c-new-date">有效期至: 2026/03/03</div></div>${btnHtml}</div>`;
             }).join('');
-
-            container.innerHTML = demoList.length===0 ? '<div style="text-align:center; color:rgba(255,255,255,0.5); padding:10px;">暂无优惠券</div>' : generateHTML(demoList.slice(0, 5));
-            if(demoList.length >= 5) document.getElementById('more-coupons-btn').classList.remove('hidden');
-
-            fullContainer.innerHTML = demoList.length===0 ? '<div style="text-align:center; padding:20px;">暂无优惠券</div>' : generateHTML(demoList);
+            container.innerHTML = demoList.length === 0 ? '<div style="text-align:center; color:rgba(255,255,255,0.5); padding:10px;">暂无优惠券</div>' : generateHTML(demoList.slice(0, 5));
+            if (demoList.length >= 5) document.getElementById('more-coupons-btn').classList.remove('hidden');
+            fullContainer.innerHTML = demoList.length === 0 ? '<div style="text-align:center; padding:20px;">暂无优惠券</div>' : generateHTML(demoList);
         }
 
         function goToCouponList() {
@@ -604,49 +1706,68 @@
 
         function goToOffer() {
             document.getElementById('page-result').classList.add('hidden');
-            document.getElementById('stickyCouponBar').classList.remove('visible');
+            document.getElementById('resultAction').classList.remove('visible');
             document.getElementById('page-landing').classList.add('hidden');
-            document.getElementById('landingAction').classList.add('hidden'); 
+            document.getElementById('landingAction').classList.add('hidden');
             document.getElementById('page-coupon-list').classList.add('hidden');
             document.getElementById('page-offer').classList.remove('hidden');
             startTimer('offerTimer');
         }
-        
-        function backToHome() { 
+
+        function backToHome() {
             document.getElementById('page-coupon-list').classList.add('hidden');
-            document.getElementById('page-landing').classList.remove('hidden'); 
+            document.getElementById('page-landing').classList.remove('hidden');
             document.getElementById('landingAction').classList.remove('hidden');
         }
-        
-        function getPlayData() { 
-            const t=new Date().toDateString(); let d=JSON.parse(localStorage.getItem('barrons_data_v3'));
-            if(!d || d.date!==t) d={date:t, used_count:0, earned_count:0, tasks:{}};
+
+        function getPlayData() {
+            const t = new Date().toDateString();
+            let d = JSON.parse(localStorage.getItem('barrons_data_v24'));
+            if (!d || d.date !== t) { d = { date: t, used_count: 0, earned_count: 0, tasks: {} }; }
             return d;
         }
-        function savePlayData(d) { localStorage.setItem('barrons_data_v3',JSON.stringify(d)); updateDrawUI(); }
-        function getRemainingChances() { const d=getPlayData(); return (BASE_DAILY_LIMIT+d.earned_count)-d.used_count; }
+        function savePlayData(d) { localStorage.setItem('barrons_data_v24', JSON.stringify(d)); updateDrawUI(); }
+        function getRemainingChances() { const d = getPlayData(); return (BASE_DAILY_LIMIT + d.earned_count) - d.used_count; }
+
         function updateDrawUI() {
-            const r=getRemainingChances(); document.getElementById('drawHint').innerHTML=`今日剩余机会：<span style="color:#FFD700;font-weight:bold;">${r}</span>/100 次`;
-            const d=getPlayData();
-            if(d.tasks.checkin) document.getElementById('btn-checkin').className="task-btn done";
-            if(d.tasks.shareFriend) document.getElementById('btn-shareF').className="task-btn done";
-            if(d.tasks.shareMoments) document.getElementById('btn-shareM').className="task-btn done";
-            if(d.tasks.read) document.getElementById('btn-read').className="task-btn done";
+            const r = getRemainingChances();
+            document.getElementById('drawHint').innerHTML = `今日剩余机会：<span style="color:#FFD700;font-weight:bold;">${r}</span>/5 次`;
+            const d = getPlayData();
+            if (d.tasks.checkin) document.getElementById('btn-checkin').className = "task-btn done";
+            if (d.tasks.shareFriend) document.getElementById('btn-shareF').className = "task-btn done";
+            if (d.tasks.shareMoments) document.getElementById('btn-shareM').className = "task-btn done";
+            if (d.tasks.read) document.getElementById('btn-read').className = "task-btn done";
         }
+
         function doTask(t) {
-            const d=getPlayData(); let add=0;
-            if(t==='checkin' && !d.tasks.checkin) { d.tasks.checkin=true; add=1; }
-            else if(t==='shareFriend' && !d.tasks.shareFriend) { d.tasks.shareFriend=true; add=1; }
-            else if(t==='shareMoments' && !d.tasks.shareMoments) { d.tasks.shareMoments=true; add=2; }
-            else if(t==='read' && !d.tasks.read) { window.location.href='https://www.barrons.com.cn/original/article'; d.tasks.read=true; add=1; }
-            else { if(t!=='read') showToast("任务已完成"); return; }
-            if(add>0) { d.earned_count+=add; savePlayData(d); showToast(`任务完成！获得 +${add} 次评测机会`); }
+            const d = getPlayData();
+            if (d.tasks[t]) { if (t !== 'read') { showToast("今日已完成"); return; } }
+            if (t === 'shareFriend' || t === 'shareMoments') {
+                currentPendingTask = t;
+                document.getElementById('shareOverlay').style.display = 'flex';
+            }
+            else if (t === 'read') {
+                window.location.href = 'https://www.barrons.com.cn/original/article';
+                completeTask(t);
+            }
+            else { completeTask(t); }
         }
-        
-        function showToast(m) { const t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
-        let ti; function startTimer(id) { if(ti) clearInterval(ti); let s=17999; const el=document.getElementById(id); if(!el) return; ti=setInterval(()=>{ if(s<=0)return; s--; const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60; el.innerText=`${h<10?'0'+h:h}:${m<10?'0'+m:m}:${sec<10?'0'+sec:sec}`; },1000); }
-        function goToTasks() { document.querySelector('.section-container').scrollIntoView({behavior:'smooth'}); }
-        function showCouponModal() { document.querySelectorAll('.section-container')[1].scrollIntoView({behavior:'smooth'}); }
+
+        function completeTask(t) {
+            const d = getPlayData();
+            if (!d.tasks[t]) {
+                d.tasks[t] = true;
+                d.earned_count += 1;
+                savePlayData(d);
+                showToast("任务完成！获得 +1 次评测机会");
+            }
+        }
+
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        let ti; function startTimer(id) { if (ti) clearInterval(ti); let s = 17999; const el = document.getElementById(id); if (!el) return; ti = setInterval(() => { if (s <= 0) return; s--; const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60; el.innerText = `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}:${sec < 10 ? '0' + sec : sec}`; }, 1000); }
+        function goToTasks() { document.querySelector('.section-container').scrollIntoView({ behavior: 'smooth' }); }
+        function showCouponModal() { document.querySelectorAll('.section-container')[1].scrollIntoView({ behavior: 'smooth' }); }
     </script>
 </body>
+
 </html>
